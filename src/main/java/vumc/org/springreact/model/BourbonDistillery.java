@@ -1,44 +1,36 @@
 package vumc.org.springreact.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "bourbon_distillery")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BourbonDistillery {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     private String name;
+    private String licenseNumber;
+    private String address;
 
-    public BourbonDistillery(String name) {
-        this.name = name;
-    }
+    @OneToMany(mappedBy = "distillery")
+    private Set<Bourbon> bourbons;
 
-    public BourbonDistillery() {
-
-    }
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "distillery_customer",
+            joinColumns = @JoinColumn(name = "distillery_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
+    private Set<Customer> customers;
 
     @Override
     public boolean equals(Object o) {
