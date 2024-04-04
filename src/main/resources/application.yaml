@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:~/temp/data/BourbonDistilleryManagement
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console.enabled: true
