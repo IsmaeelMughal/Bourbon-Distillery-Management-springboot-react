@@ -3,7 +3,7 @@ package vumc.org.springreact.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vumc.org.springreact.model.BourbonDistillery;
+import vumc.org.springreact.model.BourbonDistilleryEntity;
 import vumc.org.springreact.repository.BourbonDistilleryRepository;
 
 import java.util.Collection;
@@ -19,7 +19,7 @@ public class BourbonDistilleryController {
     }
 
     @GetMapping("/distilleries")
-    Collection<BourbonDistillery> distilleries() {
+    Collection<BourbonDistilleryEntity> distilleries() {
         return bourbonDistilleryRepository.findAll();
     }
 }

@@ -12,19 +12,21 @@ import vumc.org.springreact.enums.BourbonType;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Bourbon {
+public class BourbonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "distillery_id")
-    private BourbonDistillery distillery;
-
+    @Column(name = "bourbon_id")
+    private Integer bourbonId;
+    @Column(name = "name")
+    @Basic
     private String name;
-
+    @Column(name = "abv")
+    @Basic
+    private double abv;
     @Enumerated(EnumType.STRING)
     private BourbonType type;
+    @ManyToOne
+    @JoinColumn(name = "distillery_id")
+    private BourbonDistilleryEntity distillery;
 
-    private double abv;
 }

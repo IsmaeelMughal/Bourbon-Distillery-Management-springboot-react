@@ -13,12 +13,16 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "customer_id")
+    private Integer customerId;
+    @Column(name = "name")
+    @Basic
     private String name;
+    @Column(name = "phone_number")
     private String phoneNumber;
     @ManyToMany(mappedBy = "customers")
-    private Set<BourbonDistillery> distilleries;
+    private Set<BourbonDistilleryEntity> distilleries;
 }

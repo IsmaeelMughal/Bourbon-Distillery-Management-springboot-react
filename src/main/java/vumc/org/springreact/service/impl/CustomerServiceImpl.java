@@ -6,13 +6,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import vumc.org.springreact.dtos.CustomerDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
+import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
-import vumc.org.springreact.model.Customer;
+import vumc.org.springreact.model.CustomerEntity;
 import vumc.org.springreact.repository.CustomerRepository;
 import vumc.org.springreact.service.CustomerService;
 import vumc.org.springreact.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,10 +25,13 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("CustomerServiceImpl :: addCustomer starts");
         Long startTime = System.currentTimeMillis();
         ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
-        Customer customer = new Customer();
+        if(customerDTO == null){
+            throw new InvalidArgumentsException("Customer can not be empty!!");
+        }
+        CustomerEntity customer = new CustomerEntity();
         BeanUtils.copyProperties(customerDTO,customer);
-        Customer savedCustomer = customerRepository.save(customer);
-        customerDTO.setId(savedCustomer.getId());
+        CustomerEntity savedCustomer = customerRepository.save(customer);
+        customerDTO.setId(savedCustomer.getCustomerId());
         responseDTO.setData(customerDTO);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
         Long endTime = System.currentTimeMillis();
@@ -41,7 +44,10 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("CustomerServiceImpl :: getCustomer starts");
         Long startTime = System.currentTimeMillis();
         ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer with with Id " + customerId + " does not Exist!"));
+        if(customerId == null){
+            throw new InvalidArgumentsException("CustomerId can not be empty!!");
+        }
+        CustomerEntity customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer with with Id " + customerId + " does not Exist!"));
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer, customerDTO);
         responseDTO.setData(customerDTO);
@@ -56,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("CustomerServiceImpl :: getAllCustomer starts");
         Long startTime = System.currentTimeMillis();
         ResponseDTO<List<CustomerDTO>> responseDTO = new ResponseDTO<>();
-        List<Customer> customers = customerRepository.findAll();
+        List<CustomerEntity> customers = customerRepository.findAll();
         List<CustomerDTO> customerDTOs = customers.stream().map(customer -> {
             CustomerDTO customerDTO = new CustomerDTO();
             BeanUtils.copyProperties(customer, customerDTO);
@@ -74,7 +80,10 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("CustomerServiceImpl :: editCustomer starts");
         Long startTime = System.currentTimeMillis();
         ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
-        Customer customer = new Customer();
+        if(customerDTO == null){
+            throw new InvalidArgumentsException("Customer can not be empty!!");
+        }
+        CustomerEntity customer = new CustomerEntity();
         customer.setName(customer.getName());
         customer.setPhoneNumber(customer.getPhoneNumber());
         customerRepository.save(customer);
@@ -90,7 +99,11 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("CustomerServiceImpl :: deleteCustomer starts");
         Long startTime = System.currentTimeMillis();
         ResponseDTO<Boolean> responseDTO = new ResponseDTO<>();
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer with with Id " + customerId + " does not Exist!"));
+        if(customerId == null){
+            throw new InvalidArgumentsException("CustomerId can not be empty!!");
+        }
+        CustomerEntity customer = customerRepository.findById(customerId).orElseThrow(
+                () -> new ResourceNotFoundException("Customer with with Id " + customerId + " does not Exist!"));
         customer.getDistilleries().clear();
         customer.setDistilleries(null);
         customerRepository.delete(customer);
