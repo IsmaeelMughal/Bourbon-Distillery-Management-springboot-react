@@ -6,10 +6,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import vumc.org.springreact.dtos.CustomerDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
+import vumc.org.springreact.exceptions.ResourceNotFoundException;
 import vumc.org.springreact.model.Customer;
 import vumc.org.springreact.repository.CustomerRepository;
 import vumc.org.springreact.service.CustomerService;
 import vumc.org.springreact.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     @Override
     public ResponseDTO<CustomerDTO> addCustomer(CustomerDTO customerDTO) {
-        log.info("CustomerServiceImpl :: addLevelFourAccount starts");
+        log.info("CustomerServiceImpl :: addCustomer starts");
         Long startTime = System.currentTimeMillis();
         ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
         Customer customer = new Customer();
@@ -28,12 +32,73 @@ public class CustomerServiceImpl implements CustomerService {
         responseDTO.setData(customerDTO);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
         Long endTime = System.currentTimeMillis();
-        log.info("CustomerServiceImpl :: addLevelFourAccount ends at " + (endTime - startTime) + "ms");
+        log.info("CustomerServiceImpl :: addCustomer ends at " + (endTime - startTime) + "ms");
         return responseDTO;
     }
 
     @Override
     public ResponseDTO<CustomerDTO> getCustomer(Integer customerId) {
-        return null;
+        log.info("CustomerServiceImpl :: getCustomer starts");
+        Long startTime = System.currentTimeMillis();
+        ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer with with Id " + customerId + " does not Exist!"));
+        CustomerDTO customerDTO = new CustomerDTO();
+        BeanUtils.copyProperties(customer, customerDTO);
+        responseDTO.setData(customerDTO);
+        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        Long endTime = System.currentTimeMillis();
+        log.info("CustomerServiceImpl :: getCustomer ends at " + (endTime - startTime) + "ms");
+        return responseDTO;
     }
+
+    @Override
+    public ResponseDTO<List<CustomerDTO>> getAllCustomers() {
+        log.info("CustomerServiceImpl :: getAllCustomer starts");
+        Long startTime = System.currentTimeMillis();
+        ResponseDTO<List<CustomerDTO>> responseDTO = new ResponseDTO<>();
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDTO> customerDTOs = customers.stream().map(customer -> {
+            CustomerDTO customerDTO = new CustomerDTO();
+            BeanUtils.copyProperties(customer, customerDTO);
+            return customerDTO;
+        }).toList();
+        responseDTO.setData(customerDTOs);
+        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        Long endTime = System.currentTimeMillis();
+        log.info("CustomerServiceImpl :: getAllCustomer ends at " + (endTime - startTime) + "ms");
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO<CustomerDTO> editCustomer(CustomerDTO customerDTO) {
+        log.info("CustomerServiceImpl :: editCustomer starts");
+        Long startTime = System.currentTimeMillis();
+        ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
+        Customer customer = new Customer();
+        customer.setName(customer.getName());
+        customer.setPhoneNumber(customer.getPhoneNumber());
+        customerRepository.save(customer);
+        responseDTO.setData(customerDTO);
+        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        Long endTime = System.currentTimeMillis();
+        log.info("CustomerServiceImpl :: editCustomer ends at " + (endTime - startTime) + "ms");
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO<Boolean> deleteCustomer(Integer customerId) {
+        log.info("CustomerServiceImpl :: deleteCustomer starts");
+        Long startTime = System.currentTimeMillis();
+        ResponseDTO<Boolean> responseDTO = new ResponseDTO<>();
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer with with Id " + customerId + " does not Exist!"));
+        customer.getDistilleries().clear();
+        customer.setDistilleries(null);
+        customerRepository.delete(customer);
+        responseDTO.setData(true);
+        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        Long endTime = System.currentTimeMillis();
+        log.info("CustomerServiceImpl :: deleteCustomer ends at " + (endTime - startTime) + "ms");
+        return responseDTO;
+    }
+
 }
