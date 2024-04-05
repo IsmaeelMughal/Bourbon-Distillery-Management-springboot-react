@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import vumc.org.springreact.dtos.BourbonDTO;
 import vumc.org.springreact.dtos.BourbonDistilleryDTO;
+import vumc.org.springreact.dtos.CustomerDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
@@ -14,7 +16,10 @@ import vumc.org.springreact.repositories.BourbonDistilleryRepository;
 import vumc.org.springreact.services.BourbonDistilleryService;
 import vumc.org.springreact.utils.Constants;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +58,21 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
                 ()-> new ResourceNotFoundException("Bourbon Distillery with id: "+ distilleryId + " not found!"));
         BourbonDistilleryDTO bourbonDistilleryDTO = new BourbonDistilleryDTO();
         BeanUtils.copyProperties(bourbonDistillery,bourbonDistilleryDTO);
+
+        Set<BourbonDTO> bourbonDTOS = bourbonDistillery.getBourbons().stream().map(bourbonEntity -> {
+            BourbonDTO bourbonDTO = new BourbonDTO();
+            BeanUtils.copyProperties(bourbonEntity, bourbonDTO);
+            return bourbonDTO;
+        }).collect(Collectors.toSet());
+        bourbonDistilleryDTO.setBourbons(bourbonDTOS);
+
+        Set<CustomerDTO> customerDTOS = bourbonDistillery.getCustomers().stream().map(customerEntity -> {
+            CustomerDTO customerDTO = new CustomerDTO();
+            BeanUtils.copyProperties(customerEntity, customerDTO);
+            return customerDTO;
+        }).collect(Collectors.toSet());
+        bourbonDistilleryDTO.setCustomers(customerDTOS);
+
         responseDTO.setData(bourbonDistilleryDTO);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
         Long endTime = System.currentTimeMillis();

@@ -66,10 +66,10 @@ function DistilleryCard({ distilleryData, handleDeleteBourbonDistillery }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Delete Task</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Delete Distillery</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this Task?
+            Are you sure you want to delete this Distillery?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

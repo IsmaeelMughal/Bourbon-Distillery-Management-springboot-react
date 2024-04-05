@@ -11,7 +11,7 @@ import vumc.org.springreact.enums.BourbonType;
 public class BourbonDTO {
     private Integer bourbonId;
     private String name;
-    private double abv;
+    private Double abv;
     private BourbonType type;
     private Integer distillery;
 }

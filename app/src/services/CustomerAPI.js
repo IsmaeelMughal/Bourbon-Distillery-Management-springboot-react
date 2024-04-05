@@ -29,3 +29,13 @@ export const addCustomer = async (customerData) => {
     throw error;
   }
 };
+
+export const editCustomer = async (customerData) => {
+  try {
+    const endpoint = `/customers`;
+    const res = await myAxios.put(endpoint, customerData);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

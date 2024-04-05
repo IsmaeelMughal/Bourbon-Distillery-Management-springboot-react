@@ -53,10 +53,10 @@ function CustomerCard({ customerData, handleDeleteCustomer }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Delete Task</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Delete Customer</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this Task?
+            Are you sure you want to delete this Customer?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

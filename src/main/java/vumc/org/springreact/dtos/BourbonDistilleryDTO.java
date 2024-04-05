@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,4 +14,6 @@ public class BourbonDistilleryDTO {
     private String name;
     private String licenseNumber;
     private String address;
+    private Set<BourbonDTO> bourbons;
+    private Set<CustomerDTO> customers;
 }
