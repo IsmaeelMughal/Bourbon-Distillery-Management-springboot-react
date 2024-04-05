@@ -141,10 +141,8 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
         List<BourbonEntity> bourbonEntities = bourbonRepository.findByDistillery_DistilleryId(distilleryId);
         bourbonRepository.deleteAll(bourbonEntities);
 
-
-        Set<CustomerEntity> customerEntities = customerRepository.findCustomersByDistilleryId(distilleryId);
-        customerRepository.deleteAll(customerEntities);
-
+        bourbonDistillery.setCustomers(null);
+        bourbonDistilleryRepository.save(bourbonDistillery);
         bourbonDistilleryRepository.delete(bourbonDistillery);
         responseDTO.setData(true);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
