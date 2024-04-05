@@ -38,7 +38,7 @@ public class BourbonServiceImpl implements BourbonService {
         BourbonEntity savedBourbon = bourbonRepository.save(bourbon);
         bourbonDTO.setBourbonId(savedBourbon.getBourbonId());
         responseDTO.setData(bourbonDTO);
-        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        responseDTO.setStatusCode(Constants.STATUS_CREATED);
         Long endTime = System.currentTimeMillis();
         log.info("BourbonServiceImpl :: addBourbon ends at " + (endTime - startTime) + "ms");
         return responseDTO;

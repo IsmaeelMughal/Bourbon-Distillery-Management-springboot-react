@@ -35,7 +35,7 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
         BourbonDistilleryEntity savedBourbonDistillery =  bourbonDistilleryRepository.save(bourbonDistillery);
         bourbonDistilleryDTO.setDistilleryId(savedBourbonDistillery.getDistilleryId());
         responseDTO.setData(bourbonDistilleryDTO);
-        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        responseDTO.setStatusCode(Constants.STATUS_CREATED);
         Long endTime = System.currentTimeMillis();
         log.info("BourbonDistilleryServiceImpl :: addBourbonDistillery ends at " + (endTime - startTime) + "ms");
         return responseDTO;

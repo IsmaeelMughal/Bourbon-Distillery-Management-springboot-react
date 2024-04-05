@@ -1,42 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import PageNotFound from "./pages/PageNotFound";
+import UserLayout from "./layout/UserLayout";
+import HomePage from "./pages/HomePage";
 
 const App = () => {
-
-  const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-
-    fetch('api/distilleries')
-        .then(response => response.json())
-        .then(data => {
-          setGroups(data);
-          setLoading(false);
-        })
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <div className="App-intro">
-            <h2>Distillery List</h2>
-            {groups.map(distillery =>
-                <div key={distillery.id}>
-                  {distillery.name}
-                </div>
-            )}
-          </div>
-        </header>
-      </div>
+    <Routes>
+      <Route path="/" element={<UserLayout />}>
+        <Route index element={<HomePage />} />
+        {/* <Route path="addtask" element={<AddTask />} /> */}
+      </Route>
+
+      <Route path="/404" element={<PageNotFound />} />
+      <Route path="*" element={<Navigate to={"/404"} />} />
+    </Routes>
   );
-}
+};
 
 export default App;

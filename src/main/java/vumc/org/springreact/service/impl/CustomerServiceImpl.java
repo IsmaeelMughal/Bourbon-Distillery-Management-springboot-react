@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerEntity savedCustomer = customerRepository.save(customer);
         customerDTO.setId(savedCustomer.getCustomerId());
         responseDTO.setData(customerDTO);
-        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        responseDTO.setStatusCode(Constants.STATUS_CREATED);
         Long endTime = System.currentTimeMillis();
         log.info("CustomerServiceImpl :: addCustomer ends at " + (endTime - startTime) + "ms");
         return responseDTO;
