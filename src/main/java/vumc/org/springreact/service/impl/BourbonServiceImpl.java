@@ -32,6 +32,9 @@ public class BourbonServiceImpl implements BourbonService {
         }
         BourbonEntity bourbon = new BourbonEntity();
         BeanUtils.copyProperties(bourbonDTO, bourbon);
+        bourbon.setDistillery(bourbonDistilleryRepository.findById(bourbonDTO.getDistillery()).orElseThrow(
+                ()-> new ResourceNotFoundException("No BourbonDistillery found with id : "+ bourbonDTO.getDistillery())
+        ));
         BourbonEntity savedBourbon = bourbonRepository.save(bourbon);
         bourbonDTO.setBourbonId(savedBourbon.getBourbonId());
         responseDTO.setData(bourbonDTO);
