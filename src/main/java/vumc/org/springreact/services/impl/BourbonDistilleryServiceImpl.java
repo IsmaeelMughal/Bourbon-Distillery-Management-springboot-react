@@ -1,18 +1,16 @@
-package vumc.org.springreact.service.impl;
+package vumc.org.springreact.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import vumc.org.springreact.dtos.BourbonDTO;
 import vumc.org.springreact.dtos.BourbonDistilleryDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
-import vumc.org.springreact.model.BourbonDistilleryEntity;
-import vumc.org.springreact.repository.BourbonDistilleryRepository;
-import vumc.org.springreact.service.BourbonDistilleryService;
+import vumc.org.springreact.models.BourbonDistilleryEntity;
+import vumc.org.springreact.repositories.BourbonDistilleryRepository;
+import vumc.org.springreact.services.BourbonDistilleryService;
 import vumc.org.springreact.utils.Constants;
 
 import java.util.List;

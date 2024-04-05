@@ -1,4 +1,4 @@
-package vumc.org.springreact.service.impl;
+package vumc.org.springreact.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +8,10 @@ import vumc.org.springreact.dtos.BourbonDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
-import vumc.org.springreact.model.BourbonEntity;
-import vumc.org.springreact.repository.BourbonDistilleryRepository;
-import vumc.org.springreact.repository.BourbonRepository;
-import vumc.org.springreact.service.BourbonService;
+import vumc.org.springreact.models.BourbonEntity;
+import vumc.org.springreact.repositories.BourbonDistilleryRepository;
+import vumc.org.springreact.repositories.BourbonRepository;
+import vumc.org.springreact.services.BourbonService;
 import vumc.org.springreact.utils.Constants;
 
 import java.util.List;

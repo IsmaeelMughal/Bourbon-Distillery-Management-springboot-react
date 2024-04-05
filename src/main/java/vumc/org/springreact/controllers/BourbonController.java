@@ -1,10 +1,10 @@
-package vumc.org.springreact.controller;
+package vumc.org.springreact.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import vumc.org.springreact.dtos.BourbonDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
-import vumc.org.springreact.service.BourbonService;
+import vumc.org.springreact.services.BourbonService;
 
 import java.util.List;
 

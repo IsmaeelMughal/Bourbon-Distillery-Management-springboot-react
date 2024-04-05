@@ -1,4 +1,4 @@
-package vumc.org.springreact.service;
+package vumc.org.springreact.services;
 
 import vumc.org.springreact.dtos.CustomerDTO;
 import vumc.org.springreact.dtos.ResponseDTO;

@@ -1,10 +1,10 @@
-package vumc.org.springreact.controller;
+package vumc.org.springreact.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import vumc.org.springreact.dtos.CustomerDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
-import vumc.org.springreact.service.CustomerService;
+import vumc.org.springreact.services.CustomerService;
 
 import java.util.List;
 

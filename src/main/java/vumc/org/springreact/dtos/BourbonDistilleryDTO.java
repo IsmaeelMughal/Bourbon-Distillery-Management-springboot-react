@@ -1,13 +1,8 @@
 package vumc.org.springreact.dtos;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vumc.org.springreact.model.BourbonEntity;
-import vumc.org.springreact.model.CustomerEntity;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
