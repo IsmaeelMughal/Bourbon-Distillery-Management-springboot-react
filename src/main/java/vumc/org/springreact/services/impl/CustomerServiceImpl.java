@@ -89,8 +89,8 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerEntity customer = customerRepository.findById(customerDTO.getCustomerId()).orElseThrow(
                 ()-> new ResourceNotFoundException("No Customer found with id: "+ customerDTO.getCustomerId())
         );
-        customer.setName(customer.getName());
-        customer.setPhoneNumber(customer.getPhoneNumber());
+        customer.setName(customerDTO.getName());
+        customer.setPhoneNumber(customerDTO.getPhoneNumber());
         customerRepository.save(customer);
         responseDTO.setData(customerDTO);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
