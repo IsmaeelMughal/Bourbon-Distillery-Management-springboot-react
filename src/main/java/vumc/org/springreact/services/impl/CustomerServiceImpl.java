@@ -1,4 +1,4 @@
-package vumc.org.springreact.service.impl;
+package vumc.org.springreact.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +8,9 @@ import vumc.org.springreact.dtos.CustomerDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
-import vumc.org.springreact.model.CustomerEntity;
-import vumc.org.springreact.repository.CustomerRepository;
-import vumc.org.springreact.service.CustomerService;
+import vumc.org.springreact.models.CustomerEntity;
+import vumc.org.springreact.repositories.CustomerRepository;
+import vumc.org.springreact.services.CustomerService;
 import vumc.org.springreact.utils.Constants;
 
 import java.util.List;

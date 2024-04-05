@@ -1,14 +1,11 @@
-package vumc.org.springreact.controller;
+package vumc.org.springreact.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import vumc.org.springreact.dtos.BourbonDistilleryDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
-import vumc.org.springreact.model.BourbonDistilleryEntity;
-import vumc.org.springreact.repository.BourbonDistilleryRepository;
-import vumc.org.springreact.service.BourbonDistilleryService;
+import vumc.org.springreact.services.BourbonDistilleryService;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController

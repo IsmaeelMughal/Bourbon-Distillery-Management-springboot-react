@@ -1,4 +1,4 @@
-package vumc.org.springreact.model;
+package vumc.org.springreact.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
