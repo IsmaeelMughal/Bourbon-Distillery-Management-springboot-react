@@ -39,3 +39,36 @@ export const editCustomer = async (customerData) => {
     throw error;
   }
 };
+
+export const getUnassignedCustomers = async (distilleryId) => {
+  try {
+    const endpoint = `/customers/unassigned/${distilleryId}`;
+    const res = await myAxios.get(endpoint);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const assignCustomerToDistillery = async (distilleryId, customerId) => {
+  try {
+    const endpoint = `/customers/${distilleryId}/${customerId}`;
+    const res = await myAxios.get(endpoint);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const unAssignCustomerFromDistillery = async (
+  distilleryId,
+  customerId
+) => {
+  try {
+    const endpoint = `/customers/unassign/${distilleryId}/${customerId}`;
+    const res = await myAxios.post(endpoint, {});
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

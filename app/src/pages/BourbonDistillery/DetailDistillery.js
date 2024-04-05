@@ -18,8 +18,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ComponentLoader from "../../components/ComponentLoader";
 import { addBourbon, deleteBourbon } from "../../services/BourbonAPI";
+import {
+  assignCustomerToDistillery,
+  getUnassignedCustomers,
+  unAssignCustomerFromDistillery,
+} from "../../services/CustomerAPI";
 
-const options = [
+const bourbonTypeOptions = [
   { value: "SINGLE_BARREL", label: "Single Barrel" },
   { value: "CASK_STRENGTH", label: "Cask Strength" },
   { value: "WHEATED", label: "Wheated" },
@@ -35,15 +40,35 @@ function DetailDistillery() {
   const [isLoading, setIsLoading] = useState(false);
   const [listOfBourbon, setListOfBourbon] = useState([]);
   const [listOfCustomer, setListOfCustomer] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedBourbonTypeOption, setSelectedBourbonTypeOption] =
+    useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openDeleteCustomerModal, setOpenDeleteCustomerModal] = useState(false);
+
   const [selectedBourbon, setSelectedBourbon] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+  const [selectedCustomerOption, setSelectedCustomerOption] = useState(null);
+  const [customerOptions, setCustomerOptions] = useState([]);
+
+  const handleCustomerOptionChange = (selectedOption) => {
+    setSelectedCustomerOption(selectedOption);
+  };
+
   const handleOpenDeleteModal = () => {
     setOpenDeleteModal(true);
   };
   const handleCloseDeleteModal = () => {
     setOpenDeleteModal(false);
   };
+
+  const handleOpenDeleteCustomerModal = () => {
+    setOpenDeleteCustomerModal(true);
+  };
+  const handleCloseDeleteCustomerModal = () => {
+    setOpenDeleteCustomerModal(false);
+  };
+
   const handleDeleteClick = async () => {
     setOpenDeleteModal(false);
     try {
@@ -61,8 +86,8 @@ function DetailDistillery() {
       toast.error("Failed to Delete Bourbon!!!");
     }
   };
-  const handleChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
+  const handleBourbonTypeChange = (selectedOption) => {
+    setSelectedBourbonTypeOption(selectedOption);
   };
   const fetchDistilleryDetails = async () => {
     try {
@@ -81,8 +106,29 @@ function DetailDistillery() {
     }
   };
 
+  const fetchUnassignedCustomers = async () => {
+    try {
+      setIsLoading(true);
+      const res = await getUnassignedCustomers(distilleryData.distilleryId);
+      if (res.statusCode === 200) {
+        const options = res.data.map((customer) => ({
+          value: customer.customerId,
+          label: customer.name + "-" + customer.phoneNumber,
+        }));
+        setCustomerOptions(options);
+      } else {
+        toast.error("Failed To Fetch Distillery Details");
+      }
+    } catch (err) {
+      toast.error("Failed To Fetch Distillery Details");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchDistilleryDetails();
+    fetchUnassignedCustomers();
   }, []);
 
   const handleAddBourbon = async (event) => {
@@ -90,7 +136,7 @@ function DetailDistillery() {
     const requestBody = {
       name: event.target.name.value,
       abv: event.target.abv.value,
-      type: selectedOption.value,
+      type: selectedBourbonTypeOption.value,
       distillery: distilleryData.distilleryId,
     };
     try {
@@ -103,6 +149,56 @@ function DetailDistillery() {
       }
     } catch {
       toast.error("Failed to Add Bourbon Distillery!!!");
+    }
+  };
+
+  const handleAssignCustomer = async (event) => {
+    event.preventDefault();
+    try {
+      const res = await assignCustomerToDistillery(
+        distilleryData.distilleryId,
+        selectedCustomerOption.value
+      );
+      if (res.statusCode === 200) {
+        toast.success("Assigned Customer Successfull!!!");
+        setListOfCustomer((prev) => [...prev, res.data]);
+        const remOptionsCustomers = customerOptions.filter(
+          (customer) => customer.value != selectedCustomerOption.value
+        );
+        setCustomerOptions(remOptionsCustomers);
+        setSelectedCustomerOption(null);
+      } else {
+        toast.error(res.errorMessage);
+      }
+    } catch {
+      toast.error("Failed to Assign Customer!!!");
+    }
+  };
+
+  const handleDeleteCustomerClick = async () => {
+    try {
+      const res = await unAssignCustomerFromDistillery(
+        distilleryData.distilleryId,
+        selectedCustomer
+      );
+      if (res.statusCode === 200) {
+        toast.success("Customer UnAssigned Successfull!!!");
+        const remCustomers = listOfCustomer.filter(
+          (customer) => customer.customerId != selectedCustomer
+        );
+        setListOfCustomer(remCustomers);
+        setCustomerOptions((prev) => [
+          ...prev,
+          {
+            value: res.data.customerId,
+            label: res.data.name + "-" + res.data.phoneNumber,
+          },
+        ]);
+      } else {
+        toast.error(res.errorMessage);
+      }
+    } catch {
+      toast.error("Failed to UnAssign Customer!!!");
     }
   };
 
@@ -155,9 +251,9 @@ function DetailDistillery() {
               </div>
               <div>
                 <Select
-                  value={selectedOption}
-                  onChange={handleChange}
-                  options={options}
+                  value={selectedBourbonTypeOption}
+                  onChange={handleBourbonTypeChange}
+                  options={bourbonTypeOptions}
                   placeholder="Select a bourbon type"
                   required
                 />
@@ -220,6 +316,21 @@ function DetailDistillery() {
 
           <div className="container my-3">
             <h4>Customers</h4>
+            <form onSubmit={handleAssignCustomer}>
+              <div>
+                <p>Select A Customer to Assign to this Distillery:</p>
+                <Select
+                  value={selectedCustomerOption}
+                  onChange={handleCustomerOptionChange}
+                  options={customerOptions}
+                  placeholder="Select a Customer"
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary my-2">
+                Assign Customer
+              </button>
+            </form>
             <TableContainer component={Paper} className="my-5">
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -264,15 +375,35 @@ function DetailDistillery() {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Delete Distillery</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Delete Bourbon</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this Distillery?
+            Are you sure you want to delete this Bourbon?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteClick}>Yes</Button>
           <Button onClick={handleCloseDeleteModal} autoFocus>
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDeleteCustomerModal}
+        onClose={handleCloseDeleteCustomerModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">UnAssign Customer</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to UnAssign this Customer?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCustomerClick}>Yes</Button>
+          <Button onClick={handleCloseDeleteCustomerModal} autoFocus>
             No
           </Button>
         </DialogActions>

@@ -10,7 +10,6 @@ import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
 import vumc.org.springreact.models.BourbonDistilleryEntity;
-import vumc.org.springreact.models.BourbonEntity;
 import vumc.org.springreact.models.CustomerEntity;
 import vumc.org.springreact.repositories.BourbonDistilleryRepository;
 import vumc.org.springreact.repositories.CustomerRepository;
@@ -19,7 +18,6 @@ import vumc.org.springreact.utils.Constants;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -116,9 +114,15 @@ public class CustomerServiceImpl implements CustomerService {
         }
         CustomerEntity customer = customerRepository.findById(customerId).orElseThrow(
                 () -> new ResourceNotFoundException("Customer with with Id " + customerId + " does not Exist!"));
+
+        customer.getDistilleries().forEach(distillery -> {distillery.getCustomers().remove(customer);
+        bourbonDistilleryRepository.save(distillery);
+        });
+
         customer.getDistilleries().clear();
-        customer.setDistilleries(null);
+
         customerRepository.delete(customer);
+
         responseDTO.setData(true);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
         Long endTime = System.currentTimeMillis();
