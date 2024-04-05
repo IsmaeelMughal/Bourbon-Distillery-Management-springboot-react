@@ -27,6 +27,12 @@ function DistilleryCard({ distilleryData, handleDeleteBourbonDistillery }) {
     });
   };
 
+  const handleShowDetailDistilleryClick = () => {
+    navigate("/detail-distillery", {
+      state: { distilleryData: distilleryData },
+    });
+  };
+
   return (
     <div>
       <div className="card my-5">
@@ -41,7 +47,7 @@ function DistilleryCard({ distilleryData, handleDeleteBourbonDistillery }) {
           </div>
           <button
             className="btn btn-info mx-2"
-            onClick={handleEditDistilleryClick}
+            onClick={handleShowDetailDistilleryClick}
           >
             Show Details
           </button>

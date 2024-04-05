@@ -11,6 +11,7 @@ import EditDistillery from "./pages/BourbonDistillery/EditDistillery";
 import AllCustomers from "./pages/Customer/AllCustomers";
 import AddCustomer from "./pages/Customer/AddCustomer";
 import EditCustomer from "./pages/Customer/EditCustomer";
+import DetailDistillery from "./pages/BourbonDistillery/DetailDistillery";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route index element={<AllDistelleries />} />
         <Route path="add-distillery" element={<AddDistillery />} />
         <Route path="edit-distillery" element={<EditDistillery />} />
+        <Route path="detail-distillery" element={<DetailDistillery />} />
         <Route path="customers" element={<AllCustomers />} />
         <Route path="add-customer" element={<AddCustomer />} />
         <Route path="edit-customer" element={<EditCustomer />} />
