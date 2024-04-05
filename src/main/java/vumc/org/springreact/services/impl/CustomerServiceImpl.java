@@ -9,18 +9,24 @@ import vumc.org.springreact.dtos.CustomerDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
+import vumc.org.springreact.models.BourbonDistilleryEntity;
+import vumc.org.springreact.models.BourbonEntity;
 import vumc.org.springreact.models.CustomerEntity;
+import vumc.org.springreact.repositories.BourbonDistilleryRepository;
 import vumc.org.springreact.repositories.CustomerRepository;
 import vumc.org.springreact.services.CustomerService;
 import vumc.org.springreact.utils.Constants;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
+    private final BourbonDistilleryRepository bourbonDistilleryRepository;
     @Override
     @Transactional
     public ResponseDTO<CustomerDTO> addCustomer(CustomerDTO customerDTO) {
@@ -120,4 +126,31 @@ public class CustomerServiceImpl implements CustomerService {
         return responseDTO;
     }
 
+    @Override
+    @Transactional
+    public ResponseDTO<CustomerDTO> assignDistilleryToCustomer(Integer distilleryId, Integer customerId) {
+        log.info("CustomerServiceImpl :: deleteCustomer starts");
+        Long startTime = System.currentTimeMillis();
+        ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
+        if(distilleryId == null || customerId == null){
+            throw new InvalidArgumentsException("Id can not be null");
+        }
+        BourbonDistilleryEntity bourbonDistillery = bourbonDistilleryRepository.findById(distilleryId).orElseThrow(
+                ()-> new ResourceNotFoundException("No Distillery found with id: "+ distilleryId));
+        CustomerEntity customer = customerRepository.findById(customerId).orElseThrow(
+                ()-> new ResourceNotFoundException("No Customer found with id: " + customerId));
+        Set<BourbonDistilleryEntity>bourbonDistilleryEntities = customer.getDistilleries();
+        bourbonDistilleryEntities.add(bourbonDistillery);
+        customer.setDistilleries(bourbonDistilleryEntities);
+        customerRepository.save(customer);
+        CustomerDTO customerDTO = new CustomerDTO();
+        BeanUtils.copyProperties(customer,customerDTO);
+        Set<Integer> ids = customer.getDistilleries().stream().map(BourbonDistilleryEntity::getDistilleryId).collect(Collectors.toSet());
+        customerDTO.setDistilleries(ids);
+        responseDTO.setData(customerDTO);
+        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        Long endTime = System.currentTimeMillis();
+        log.info("CustomerServiceImpl :: deleteCustomer ends at " + (endTime - startTime) + "ms");
+        return responseDTO;
+    }
 }

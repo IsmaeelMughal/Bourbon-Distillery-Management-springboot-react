@@ -34,4 +34,8 @@ public class CustomerController {
     public ResponseDTO<Boolean> deleteCustomer(@PathVariable Integer customerId){
         return customerService.deleteCustomer(customerId);
     }
+    @GetMapping("/{distilleryId}/{customerId}")
+    public ResponseDTO<CustomerDTO> assignDistilleryToCustomer(@PathVariable Integer customerId, @PathVariable Integer distilleryId){
+        return customerService.assignDistilleryToCustomer(distilleryId,customerId);
+    }
 }

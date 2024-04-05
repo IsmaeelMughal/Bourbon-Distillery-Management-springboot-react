@@ -11,4 +11,5 @@ public interface CustomerService {
     ResponseDTO<List<CustomerDTO>> getAllCustomers();
     ResponseDTO<CustomerDTO> editCustomer(CustomerDTO customerDTO);
     ResponseDTO<Boolean> deleteCustomer(Integer customerId);
+    ResponseDTO<CustomerDTO> assignDistilleryToCustomer(Integer distilleryId, Integer customerId);
 }
