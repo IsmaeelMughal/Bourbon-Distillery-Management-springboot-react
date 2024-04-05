@@ -38,4 +38,8 @@ public class CustomerController {
     public ResponseDTO<CustomerDTO> assignDistilleryToCustomer(@PathVariable Integer customerId, @PathVariable Integer distilleryId){
         return customerService.assignDistilleryToCustomer(distilleryId,customerId);
     }
+    @GetMapping("unassigned/{distilleryId}")
+    public ResponseDTO<List<CustomerDTO>> getAllUnassignedCustomers(@PathVariable Integer distilleryId){
+        return customerService.getUnassignedCustomers(distilleryId);
+    }
 }

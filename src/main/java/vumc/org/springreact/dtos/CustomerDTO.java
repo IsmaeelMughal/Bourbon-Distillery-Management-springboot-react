@@ -13,5 +13,4 @@ public class CustomerDTO {
     private Integer customerId;
     private String name;
     private String phoneNumber;
-    private Set<Integer> distilleries;
 }

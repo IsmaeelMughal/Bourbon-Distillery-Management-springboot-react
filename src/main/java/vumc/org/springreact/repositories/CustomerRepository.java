@@ -14,4 +14,7 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Intege
 
     @Query("SELECT c FROM CustomerEntity c JOIN c.distilleries d WHERE d.distilleryId = :distilleryId")
     Set<CustomerEntity> findCustomersByDistilleryId(@Param("distilleryId") Integer distilleryId);
+    @Query("SELECT c FROM CustomerEntity c WHERE c.customerId NOT IN " +
+            "(SELECT c2.customerId FROM CustomerEntity c2 JOIN c2.distilleries d WHERE d.distilleryId = :distilleryId)")
+    Set<CustomerEntity> findUnassignedCustomers(@Param("distilleryId") Integer distilleryId);
 }

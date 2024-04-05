@@ -129,7 +129,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public ResponseDTO<CustomerDTO> assignDistilleryToCustomer(Integer distilleryId, Integer customerId) {
-        log.info("CustomerServiceImpl :: deleteCustomer starts");
+        log.info("CustomerServiceImpl :: assignDistilleryToCustomer starts");
         Long startTime = System.currentTimeMillis();
         ResponseDTO<CustomerDTO> responseDTO = new ResponseDTO<>();
         if(distilleryId == null || customerId == null){
@@ -137,20 +137,39 @@ public class CustomerServiceImpl implements CustomerService {
         }
         BourbonDistilleryEntity bourbonDistillery = bourbonDistilleryRepository.findById(distilleryId).orElseThrow(
                 ()-> new ResourceNotFoundException("No Distillery found with id: "+ distilleryId));
+
         CustomerEntity customer = customerRepository.findById(customerId).orElseThrow(
                 ()-> new ResourceNotFoundException("No Customer found with id: " + customerId));
-        Set<BourbonDistilleryEntity>bourbonDistilleryEntities = customer.getDistilleries();
-        bourbonDistilleryEntities.add(bourbonDistillery);
-        customer.setDistilleries(bourbonDistilleryEntities);
-        customerRepository.save(customer);
+
+        Set<CustomerEntity> list = bourbonDistillery.getCustomers();
+        list.add(customer);
+        bourbonDistillery.setCustomers(list);
+        bourbonDistilleryRepository.save(bourbonDistillery);
+
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer,customerDTO);
-        Set<Integer> ids = customer.getDistilleries().stream().map(BourbonDistilleryEntity::getDistilleryId).collect(Collectors.toSet());
-        customerDTO.setDistilleries(ids);
         responseDTO.setData(customerDTO);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
         Long endTime = System.currentTimeMillis();
-        log.info("CustomerServiceImpl :: deleteCustomer ends at " + (endTime - startTime) + "ms");
+        log.info("CustomerServiceImpl :: assignDistilleryToCustomer ends at " + (endTime - startTime) + "ms");
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO<List<CustomerDTO>> getUnassignedCustomers(Integer distilleryId) {
+        log.info("CustomerServiceImpl :: getUnassignedCustomers starts");
+        Long startTime = System.currentTimeMillis();
+        ResponseDTO<List<CustomerDTO>> responseDTO = new ResponseDTO<>();
+        Set<CustomerEntity> customerEntities = customerRepository.findUnassignedCustomers(distilleryId);
+        List<CustomerDTO> customerDTOS = customerEntities.stream().map(customerEntity -> {
+            CustomerDTO customerDTO = new CustomerDTO();
+            BeanUtils.copyProperties(customerEntity, customerDTO);
+            return customerDTO;
+        }).toList();
+        responseDTO.setData(customerDTOS);
+        responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
+        Long endTime = System.currentTimeMillis();
+        log.info("CustomerServiceImpl :: getUnassignedCustomers ends at " + (endTime - startTime) + "ms");
         return responseDTO;
     }
 }
