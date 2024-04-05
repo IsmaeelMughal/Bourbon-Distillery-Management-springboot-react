@@ -7,11 +7,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import vumc.org.springreact.dtos.BourbonDistilleryDTO;
 import vumc.org.springreact.dtos.ResponseDTO;
-import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
-import vumc.org.springreact.model.BourbonDistilleryEntity;
-import vumc.org.springreact.repository.BourbonDistilleryRepository;
-import vumc.org.springreact.service.impl.BourbonDistilleryServiceImpl;
+import vumc.org.springreact.models.BourbonDistilleryEntity;
+import vumc.org.springreact.repositories.BourbonDistilleryRepository;
+import vumc.org.springreact.services.impl.BourbonDistilleryServiceImpl;
 import vumc.org.springreact.utils.Constants;
 
 import java.util.Collections;
@@ -51,7 +50,7 @@ class BourbonDistilleryServiceImplTest {
         ResponseDTO<BourbonDistilleryDTO> response = bourbonDistilleryService.addBourbonDistillery(dto);
 
         
-        assertEquals(Constants.STATUS_SUCCESS, response.getStatusCode());
+        assertEquals(Constants.STATUS_CREATED, response.getStatusCode());
         assertNotNull(response.getData());
         assertEquals(1, response.getData().getDistilleryId());
     }

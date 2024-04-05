@@ -10,11 +10,11 @@ import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.enums.BourbonType;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
-import vumc.org.springreact.model.BourbonDistilleryEntity;
-import vumc.org.springreact.model.BourbonEntity;
-import vumc.org.springreact.repository.BourbonDistilleryRepository;
-import vumc.org.springreact.repository.BourbonRepository;
-import vumc.org.springreact.service.impl.BourbonServiceImpl;
+import vumc.org.springreact.models.BourbonDistilleryEntity;
+import vumc.org.springreact.models.BourbonEntity;
+import vumc.org.springreact.repositories.BourbonDistilleryRepository;
+import vumc.org.springreact.repositories.BourbonRepository;
+import vumc.org.springreact.services.impl.BourbonServiceImpl;
 import vumc.org.springreact.utils.Constants;
 
 import java.util.Collections;
@@ -64,7 +64,7 @@ class BourbonServiceImplTest {
         ResponseDTO<BourbonDTO> response = bourbonService.addBourbon(dto);
 
         // Assert
-        assertEquals(Constants.STATUS_SUCCESS, response.getStatusCode());
+        assertEquals(Constants.STATUS_CREATED, response.getStatusCode());
         assertNotNull(response.getData());
         assertEquals(1, response.getData().getBourbonId());
     }
