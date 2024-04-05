@@ -31,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerEntity customer = new CustomerEntity();
         BeanUtils.copyProperties(customerDTO,customer);
         CustomerEntity savedCustomer = customerRepository.save(customer);
-        customerDTO.setId(savedCustomer.getCustomerId());
+        customerDTO.setCustomerId(savedCustomer.getCustomerId());
         responseDTO.setData(customerDTO);
         responseDTO.setStatusCode(Constants.STATUS_CREATED);
         Long endTime = System.currentTimeMillis();

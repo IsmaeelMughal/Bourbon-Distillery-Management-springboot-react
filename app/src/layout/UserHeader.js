@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function UserHeader() {
   return (
@@ -23,23 +23,23 @@ function UserHeader() {
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/user">
+                <Link className="nav-link" aria-current="page" to="/">
                   Home
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/user/addtask">
-                  Add Task
+                <Link className="nav-link" to="/add-distillery">
+                  Add Distillery
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/user/pending-task">
-                  Pending Task
+                <Link className="nav-link" to="/customers">
+                  All Customers
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/user/completed-task">
-                  Completed Task
+                <Link className="nav-link" to="/add-customer">
+                  Add Customer
                 </Link>
               </li>
             </ul>

@@ -1,8 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 function HomeNavbar() {
-  const navigate = useNavigate();
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">

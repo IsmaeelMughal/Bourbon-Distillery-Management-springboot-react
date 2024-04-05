@@ -1,16 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import UserHeader from "./UserHeader";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 function UserLayout() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("refreshToken"));
-    if (!token || token === "") {
-      navigate("/");
-    }
-  }, []);
-
   return (
     <div>
       <UserHeader />
