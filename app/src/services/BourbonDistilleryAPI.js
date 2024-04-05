@@ -10,6 +10,16 @@ export const getAllBourbonDistilleries = async () => {
   }
 };
 
+export const getDistilleryDetails = async (distilleryId) => {
+  try {
+    const endpoint = `/distilleries/${distilleryId}`;
+    const res = await myAxios.get(endpoint);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addBourbonDistillery = async (distilleryData) => {
   try {
     const endpoint = `/distilleries`;

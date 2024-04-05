@@ -25,7 +25,7 @@ public class BourbonEntity {
     private double abv;
     @Enumerated(EnumType.STRING)
     private BourbonType type;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "distillery_id")
     private BourbonDistilleryEntity distillery;
 

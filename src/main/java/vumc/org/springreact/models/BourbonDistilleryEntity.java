@@ -27,7 +27,7 @@ public class BourbonDistilleryEntity {
     @Basic
     private String address;
 
-    @OneToMany(mappedBy = "distillery",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "distillery", cascade = CascadeType.ALL)
     private Set<BourbonEntity> bourbons;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

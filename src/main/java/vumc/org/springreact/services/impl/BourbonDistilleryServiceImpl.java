@@ -12,13 +12,14 @@ import vumc.org.springreact.dtos.ResponseDTO;
 import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
 import vumc.org.springreact.models.BourbonDistilleryEntity;
+import vumc.org.springreact.models.BourbonEntity;
+import vumc.org.springreact.models.CustomerEntity;
 import vumc.org.springreact.repositories.BourbonDistilleryRepository;
 import vumc.org.springreact.repositories.BourbonRepository;
 import vumc.org.springreact.repositories.CustomerRepository;
 import vumc.org.springreact.services.BourbonDistilleryService;
 import vumc.org.springreact.utils.Constants;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,14 +64,17 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
         BourbonDistilleryDTO bourbonDistilleryDTO = new BourbonDistilleryDTO();
         BeanUtils.copyProperties(bourbonDistillery,bourbonDistilleryDTO);
 
-        Set<BourbonDTO> bourbonDTOS = bourbonDistillery.getBourbons().stream().map(bourbonEntity -> {
+        List<BourbonEntity> bourbonEntities = bourbonRepository.findByDistillery_DistilleryId(distilleryId);
+
+        Set<BourbonDTO> bourbonDTOS = bourbonEntities.stream().map(bourbonEntity -> {
             BourbonDTO bourbonDTO = new BourbonDTO();
             BeanUtils.copyProperties(bourbonEntity, bourbonDTO);
             return bourbonDTO;
         }).collect(Collectors.toSet());
         bourbonDistilleryDTO.setBourbons(bourbonDTOS);
 
-        Set<CustomerDTO> customerDTOS = bourbonDistillery.getCustomers().stream().map(customerEntity -> {
+        Set<CustomerEntity> customerEntities = customerRepository.findCustomersByDistilleryId(distilleryId);
+        Set<CustomerDTO> customerDTOS = customerEntities.stream().map(customerEntity -> {
             CustomerDTO customerDTO = new CustomerDTO();
             BeanUtils.copyProperties(customerEntity, customerDTO);
             return customerDTO;
@@ -133,13 +137,14 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
         }
         BourbonDistilleryEntity bourbonDistillery = bourbonDistilleryRepository.findById(distilleryId).orElseThrow(
                 ()-> new ResourceNotFoundException("No Bourbon Distillery with id: " + distilleryId + " found!"));
-        log.debug("HEHE : "+ bourbonDistillery.getBourbons().size() + " " +  bourbonDistillery.getBourbons());
-        bourbonRepository.deleteAll(bourbonDistillery.getBourbons());
-        bourbonDistillery.getBourbons().clear();
-        bourbonDistillery.setBourbons(null);
-        customerRepository.deleteAll(bourbonDistillery.getCustomers());
-        bourbonDistillery.getCustomers().clear();
-        bourbonDistillery.setCustomers(null);
+
+        List<BourbonEntity> bourbonEntities = bourbonRepository.findByDistillery_DistilleryId(distilleryId);
+        bourbonRepository.deleteAll(bourbonEntities);
+
+
+        Set<CustomerEntity> customerEntities = customerRepository.findCustomersByDistilleryId(distilleryId);
+        customerRepository.deleteAll(customerEntities);
+
         bourbonDistilleryRepository.delete(bourbonDistillery);
         responseDTO.setData(true);
         responseDTO.setStatusCode(Constants.STATUS_SUCCESS);
