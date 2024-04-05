@@ -1,5 +1,6 @@
 package vumc.org.springreact.services.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,7 @@ import java.util.List;
 public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
     private final BourbonDistilleryRepository bourbonDistilleryRepository;
     @Override
+    @Transactional
     public ResponseDTO<BourbonDistilleryDTO> addBourbonDistillery(BourbonDistilleryDTO bourbonDistilleryDTO) {
         log.info("BourbonDistilleryServiceImpl :: addBourbonDistillery starts");
         Long startTime = System.currentTimeMillis();
@@ -78,6 +80,7 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
     }
 
     @Override
+    @Transactional
     public ResponseDTO<BourbonDistilleryDTO> editBourbonDistillery(BourbonDistilleryDTO bourbonDistilleryDTO) {
         log.info("BourbonDistilleryServiceImpl :: editBourbonDistillery starts");
         Long startTime = System.currentTimeMillis();
@@ -96,6 +99,7 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
     }
 
     @Override
+    @Transactional
     public ResponseDTO<Boolean> deleteBourbonDistillery(Integer distilleryId) {
         log.info("BourbonDistilleryServiceImpl :: deleteBourbonDistillery starts");
         Long startTime = System.currentTimeMillis();

@@ -1,5 +1,6 @@
 package vumc.org.springreact.services.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,7 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     @Override
+    @Transactional
     public ResponseDTO<CustomerDTO> addCustomer(CustomerDTO customerDTO) {
         log.info("CustomerServiceImpl :: addCustomer starts");
         Long startTime = System.currentTimeMillis();
@@ -75,6 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
         return responseDTO;
     }
 
+    @Transactional
     @Override
     public ResponseDTO<CustomerDTO> editCustomer(CustomerDTO customerDTO) {
         log.info("CustomerServiceImpl :: editCustomer starts");
@@ -83,7 +86,9 @@ public class CustomerServiceImpl implements CustomerService {
         if(customerDTO == null){
             throw new InvalidArgumentsException("Customer can not be empty!!");
         }
-        CustomerEntity customer = new CustomerEntity();
+        CustomerEntity customer = customerRepository.findById(customerDTO.getCustomerId()).orElseThrow(
+                ()-> new ResourceNotFoundException("No Customer found with id: "+ customerDTO.getCustomerId())
+        );
         customer.setName(customer.getName());
         customer.setPhoneNumber(customer.getPhoneNumber());
         customerRepository.save(customer);
@@ -95,6 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public ResponseDTO<Boolean> deleteCustomer(Integer customerId) {
         log.info("CustomerServiceImpl :: deleteCustomer starts");
         Long startTime = System.currentTimeMillis();
