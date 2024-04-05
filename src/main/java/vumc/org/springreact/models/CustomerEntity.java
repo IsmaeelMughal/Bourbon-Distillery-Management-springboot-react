@@ -23,6 +23,6 @@ public class CustomerEntity {
     private String name;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @ManyToMany(mappedBy = "customers")
+    @ManyToMany(mappedBy = "customers",cascade = CascadeType.ALL)
     private Set<BourbonDistilleryEntity> distilleries;
 }

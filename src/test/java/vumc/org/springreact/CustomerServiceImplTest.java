@@ -120,6 +120,7 @@ class CustomerServiceImplTest {
         entity.setName("Test Customer");
 
         when(customerRepository.save(any(CustomerEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(customerRepository.findById(any())).thenReturn(Optional.of(entity));
 
         // Act
         ResponseDTO<CustomerDTO> response = customerService.editCustomer(dto);

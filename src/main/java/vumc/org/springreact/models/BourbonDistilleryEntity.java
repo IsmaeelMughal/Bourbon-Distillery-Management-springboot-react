@@ -27,10 +27,10 @@ public class BourbonDistilleryEntity {
     @Basic
     private String address;
 
-    @OneToMany(mappedBy = "distillery")
+    @OneToMany(mappedBy = "distillery",cascade = CascadeType.ALL)
     private Set<BourbonEntity> bourbons;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "distillery_customer",
             joinColumns = @JoinColumn(name = "distillery_id"),

@@ -13,6 +13,8 @@ import vumc.org.springreact.exceptions.InvalidArgumentsException;
 import vumc.org.springreact.exceptions.ResourceNotFoundException;
 import vumc.org.springreact.models.BourbonDistilleryEntity;
 import vumc.org.springreact.repositories.BourbonDistilleryRepository;
+import vumc.org.springreact.repositories.BourbonRepository;
+import vumc.org.springreact.repositories.CustomerRepository;
 import vumc.org.springreact.services.BourbonDistilleryService;
 import vumc.org.springreact.utils.Constants;
 
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
     private final BourbonDistilleryRepository bourbonDistilleryRepository;
+    private final BourbonRepository bourbonRepository;
+    private final CustomerRepository customerRepository;
     @Override
     @Transactional
     public ResponseDTO<BourbonDistilleryDTO> addBourbonDistillery(BourbonDistilleryDTO bourbonDistilleryDTO) {
@@ -129,8 +133,11 @@ public class BourbonDistilleryServiceImpl implements BourbonDistilleryService {
         }
         BourbonDistilleryEntity bourbonDistillery = bourbonDistilleryRepository.findById(distilleryId).orElseThrow(
                 ()-> new ResourceNotFoundException("No Bourbon Distillery with id: " + distilleryId + " found!"));
+        log.debug("HEHE : "+ bourbonDistillery.getBourbons().size() + " " +  bourbonDistillery.getBourbons());
+        bourbonRepository.deleteAll(bourbonDistillery.getBourbons());
         bourbonDistillery.getBourbons().clear();
         bourbonDistillery.setBourbons(null);
+        customerRepository.deleteAll(bourbonDistillery.getCustomers());
         bourbonDistillery.getCustomers().clear();
         bourbonDistillery.setCustomers(null);
         bourbonDistilleryRepository.delete(bourbonDistillery);
